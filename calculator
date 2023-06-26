@@ -1,0 +1,70 @@
+import UIKit
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var resultLabel: UILabel!
+    
+    var numberOnScreen: Double = 0
+    var previousNumber: Double = 0
+    var performingOperation = false
+    var operation = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    @IBAction func numberButtonTapped(_ sender: UIButton) {
+        if performingOperation {
+            resultLabel.text = String(sender.tag)
+            numberOnScreen = Double(resultLabel.text!)!
+            performingOperation = false
+        } else {
+            resultLabel.text = resultLabel.text! + String(sender.tag)
+            numberOnScreen = Double(resultLabel.text!)!
+        }
+    }
+
+    @IBAction func operationButtonTapped(_ sender: UIButton) {
+        if resultLabel.text != "" && sender.tag != 11 && sender.tag != 16 {
+            previousNumber = Double(resultLabel.text!)!
+            
+            switch sender.tag {
+            case 12: // Addition
+                resultLabel.text = "+"
+            case 13: // Subtraction
+                resultLabel.text = "-"
+            case 14: // Multiplication
+                resultLabel.text = "×"
+            case 15: // Division
+                resultLabel.text = "÷"
+            default:
+                break
+            }
+            
+            operation = sender.tag
+            performingOperation = true
+        }
+        
+        if sender.tag == 16 {
+            switch operation {
+            case 12: // Addition
+                resultLabel.text = String(previousNumber + numberOnScreen)
+            case 13: // Subtraction
+                resultLabel.text = String(previousNumber - numberOnScreen)
+            case 14: // Multiplication
+                resultLabel.text = String(previousNumber * numberOnScreen)
+            case 15: // Division
+                resultLabel.text = String(previousNumber / numberOnScreen)
+            default:
+                break
+            }
+        }
+        
+        if sender.tag == 11 {
+            resultLabel.text = ""
+            previousNumber = 0
+            numberOnScreen = 0
+            operation = 0
+        }
+    }
+}
